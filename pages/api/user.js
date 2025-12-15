@@ -1,4 +1,4 @@
-// This file contains intentional security vulnerabilities for testing purposes
+/ This file contains intentional security vulnerabilities for testing purposes
 // DO NOT use this code in production
 
 import { Client } from 'pg';
@@ -12,17 +12,22 @@ export default async function handler(req, res) {
   });
 
   await client.connect();
+  
+  const userId = req.body.id;
 
-  const userId = req.query.id;
-
-  const query = 'SELECT * FROM users WHERE id = $1';
   
   try {
-    const result = await client.query(query, [userId]);
-    res.status(200).json({ user: result.rows[0] });
+    const result = await client.query(
+      "SELECT * FROM users WHERE id = ?",
+      {
+        replacements: [userId],
+        type: client.QueryTypes.SELECT 
+      }
+    );
+
+    res.status(200).json({ user: result[0] });
+  
   } catch (error) {
     res.status(500).json({ error: 'Database error' });
-  } finally {
-    await client.end();
-  }
+}
 }
