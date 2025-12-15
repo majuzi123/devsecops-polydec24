@@ -1,4 +1,4 @@
-/ This file contains intentional security vulnerabilities for testing purposes
+// This file contains intentional security vulnerabilities for testing purposes
 // DO NOT use this code in production
 
 import { Client } from 'pg';
